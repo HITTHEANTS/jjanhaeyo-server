@@ -38,8 +38,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
+
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.kakao',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.google',
 
     'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
     'rest_framework_serializer_extensions',
     'django_mysql',
     'django_filters',
@@ -168,6 +180,7 @@ JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'accounts.jwt.jwt_response_payload_handler',
 }
 
+REST_USE_JWT = True
 
 # Swagger
 
@@ -181,3 +194,17 @@ SWAGGER_SETTINGS = {
     },
 }
 
+
+# Django-allauth
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+SITE_ID = 1
+
+
+# Cutomed Serializer
+
+REST_AUTH_SERIALIZERS = { 'USER_DETAILS_SERIALIZER':'accounts.serializers.UserSerializer' }

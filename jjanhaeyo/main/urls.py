@@ -19,6 +19,8 @@ from django.urls import path, include
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
+from accounts.views import accounts
+
 admin.autodiscover()
 
 schema_view = get_schema_view(
@@ -30,10 +32,16 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('accounts/', include('accounts.urls')),
+    path('accounts/', include('allauth.urls')),
     # path('api/', include('api.urls')),
     path('admin/', admin.site.urls),
     path('docs/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+
+    path('rest-auth/', include('rest_auth.urls')),
+    path('rest-auth/registration/', include('rest_auth.registration.urls')),
+    path('rest-auth/kakao/', accounts.KakaoLogin.as_view(), name='kakao_login'),
+    path('rest-auth/facebook/', accounts.FacebookLogin.as_view(), name='facebook_login'),
+    path('rest-auth/google/', accounts.GoogleLogin.as_view(), name='google_login'),
 ]
 
 if 'debug_toolbar' in settings.INSTALLED_APPS:

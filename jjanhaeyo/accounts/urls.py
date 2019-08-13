@@ -17,5 +17,6 @@ urlpatterns = [
     path('token/verify/', verify_jwt_token),
     path('devices/login/', devices.DeviceLoginView.as_view()),
     path('devices/register/', devices.DeviceRegisterView.as_view()),
+
     path('', include(router.urls)),
 ]

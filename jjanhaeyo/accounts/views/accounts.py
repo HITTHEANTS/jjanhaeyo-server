@@ -8,6 +8,10 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_jwt.views import ObtainJSONWebToken
 from rest_framework_jwt.views import RefreshJSONWebToken
+from allauth.socialaccount.providers.kakao.views import KakaoOAuth2Adapter
+from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+from rest_auth.registration.views import SocialLoginView
 
 from accounts.serializers import UserSerializer
 from accounts.models import User
@@ -36,7 +40,7 @@ class UserLoginView(ObtainJSONWebToken):
         # For Django-rest API View
         email = request.data.get('email', None)
         password = request.data.get('password', None)
-        user = authenticate(username=email, password=password)
+        user = authenticate(email=email, password=password)
         if user is None:
             return Response({'message': 'Email or password is wrong.'}, status=status.HTTP_403_FORBIDDEN)
 
@@ -115,3 +119,14 @@ class TokenRefreshView(RefreshJSONWebToken):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         return response
 
+
+class KakaoLogin(SocialLoginView):
+    adapter_class = KakaoOAuth2Adapter
+
+
+class FacebookLogin(SocialLoginView):
+    adapter_class = FacebookOAuth2Adapter
+
+
+class GoogleLogin(SocialLoginView):
+    adapter_class = GoogleOAuth2Adapter

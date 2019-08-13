@@ -11,18 +11,11 @@ class ConfigSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    last_login_dt = serializers.SerializerMethodField()
-
     class Meta:
         model = User
-        fields = ('pk', 'name', 'date_of_birth', 'sex', 'profile_image', 'icon', 'last_login_dt')
-        fields += ('password', 'phone_number')
+        fields = ('pk', 'email', 'name', 'is_adult', 'age', 'sex', 'profile_image',
+                  'phone_number', 'is_active')
         extra_kwargs = {'password': {'write_only': True}, 'phone_number': {'write_only': True}}
-
-    def get_last_login_dt(self, obj):
-        devices = obj.devices.filter(last_login_dt__isnull=False).order_by('-last_login_dt')
-        if devices.exists():
-            return devices[0].last_login_dt.isoformat()
 
     def to_representation(self, obj):
         res = super().to_representation(obj)
@@ -68,11 +61,8 @@ class ChangeProfileSerializer(serializers.Serializer):
 
 class DeviceRegisterSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=50)
-    phone_number = serializers.CharField(max_length=15)
-    device_type = serializers.ChoiceField(choices=[
-        ('ios', 'ios'),
-        ('android', 'android'),
-    ], required=False)
+    birth = serializers.DateField()
+    device_type = serializers.CharField(max_length=10)
     push_token = serializers.CharField(max_length=512, required=False, allow_null=True, allow_blank=True)
 
 
